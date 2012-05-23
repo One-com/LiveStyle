@@ -123,7 +123,7 @@
         // Replaces a link tag with an updated version. Just replacing the href would cause FOUC.
         // We insert the new node before the old one and remove the old one after the new one has loaded.
         replaceLinkTag = function (node, href) {
-            isBusyByHref[href] = (isBusyByHref[href] || 0) + 1;
+            isBusyByHref[href] = true;
             var parent = node.parentNode,
                 newNode = node.cloneNode(true),
                 monitor;
@@ -138,7 +138,7 @@
 
             newNode.href = href;
             newNode.onload = function () {
-                isBusyByHref[href] -= 1;
+                isBusyByHref[href] = false;
                 if (node.parentNode) {
                     parent.removeChild(node);
 
