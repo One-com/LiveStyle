@@ -1,9 +1,8 @@
+/* global describe, it */
 var createLiveStyleTestServer = require('./createLiveStyleTestServer'),
     expect = require('unexpected'),
-    fs = require('fs'),
     path = require('path'),
     express = require('express'),
-    ioClient = require('socket.io-client'),
     request = require('request');
 
 describe('livestyle server in proxy mode', function () {
@@ -77,8 +76,7 @@ describe('livestyle server in proxy mode', function () {
     // the response should be an 301 pointing at /subdir/ on the
     // LiveStyle server
     it('proxy redirects correctly', function (done) {
-        var root = path.resolve(__dirname, 'proxy'),
-            upstreamServerUrl,
+        var upstreamServerUrl,
             upstreamApp = express()
                 .use(function (req, res, next) {
                     if (req.url === '/subdir') {

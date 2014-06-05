@@ -1,4 +1,5 @@
-/*global less, console*/
+/* jshint browser:true, node:false */
+/*global define, less, console*/
 define([
     'css'
 ], function (css) {
@@ -29,7 +30,7 @@ define([
                                 console.error(e);
                             } else {
                                 style = document.createElement('style');
-                                style.type = "text/css";
+                                style.type = 'text/css';
                                 style.id = 'less:' + url.replace(/\//g, '-').replace('.less', '');
 
                                 css = tree.toCSS();
