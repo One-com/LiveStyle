@@ -1,7 +1,8 @@
+/* jshint browser:true, node:false */
+/* global define */
 define({
     load: function (name, req, load, config, map) {
         var url = name,
-            path = url.split('/'),
             linkElement = document.createElement('link'),
             headElement = document.getElementsByTagName('head')[0],
             parentModuleName = map && map.parentMap && map.parentMap.name,
