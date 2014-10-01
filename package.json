@@ -49,7 +49,7 @@
     "lint": "jshint --config .jshintrc .",
     "test": "mocha",
     "prepublish": "mocha",
-    "travis": "mocha -R spec"
+    "travis": "npm run lint && mocha -R spec"
   },
   "preferGlobal": true,
   "license": "BSD"
