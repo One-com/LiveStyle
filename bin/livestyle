@@ -6,6 +6,7 @@ var express = require('express'),
     util = require('util'),
     path = require('path'),
     mappings = {},
+    replacements = {},
     optimist = require('optimist'),
     commandLineOptions = optimist
         .usage('Usage: $0 [--proxy <remotehost> [-m <directoryMapping>]] [-d] [-h <hostname>] [-p <port>] [--root directory]')
@@ -58,6 +59,9 @@ var express = require('express'),
             alias: 'm',
             describe: 'Directory mappings of the form: remoteDir=localDir where localDir is relative to the root directory unless prefixed with /'
         })
+        .options('replace', {
+            describe: 'Low level string replacement run on your html response strings. Useful to reroute http URLs to local disk. This could break your html!'
+        })
         .options('host', {
             alias: 'h',
             default: '0.0.0.0',
@@ -82,6 +86,17 @@ var express = require('express'),
                         mappings[matchUrlEqualsDir[1]] = matchUrlEqualsDir[2];
                     } else {
                         throw 'Invalid --map syntax: ' + urlEqualsDir;
+                    }
+                });
+            }
+
+            if (argv.replace) {
+                (typeof argv.replace === 'string' ? [argv.replace] : argv.replace).forEach(function (urlEqualsDir) {
+                    var matchUrlEqualsDir = urlEqualsDir.match(/^([^=]+)=([^=]+)$/);
+                    if (matchUrlEqualsDir) {
+                        replacements[matchUrlEqualsDir[1]] = matchUrlEqualsDir[2];
+                    } else {
+                        throw 'Invalid --replace syntax: ' + urlEqualsDir;
                     }
                 });
             }
@@ -123,6 +138,7 @@ var server = require('../lib/createLiveStyleApp')({
     jsxtransform: commandLineOptions.jsxtransform,
     processImage: commandLineOptions.processimage,
     mappings: mappings,
+    replacements: replacements,
     proxy: commandLineOptions.proxy || null
 }).listen(commandLineOptions.port, commandLineOptions.host);
 
